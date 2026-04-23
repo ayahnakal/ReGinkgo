@@ -62,16 +62,16 @@ case "$TARGET_DEVICE" in
 esac
 
 # Workspace
-if [[ -d /workspace ]]; then
-    WP="/workspace"
-    IS_GP=1
-else
-    IS_GP=0
-fi
+#if [[ -d /workspace ]]; then
+  #  WP="/workspace"
+   # IS_GP=1
+#else
+    #IS_GP=0
+#fi
 
-if [[ -z "$WP" ]]; then
-    echo -e "\nERROR: Environment not Gitpod! Please set the WP env var...\n"
-    exit 1
+#if [[ -z "$WP" ]]; then
+   # echo -e "\nERROR: Environment not Gitpod! Please set the WP env var...\n"
+   # exit 1
 fi
 
 if [[ ! -d drivers ]]; then
