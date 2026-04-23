@@ -72,7 +72,7 @@ esac
 #if [[ -z "$WP" ]]; then
    # echo -e "\nERROR: Environment not Gitpod! Please set the WP env var...\n"
    # exit 1
-fi
+#fi
 
 if [[ ! -d drivers ]]; then
     echo -e "\nERROR: Please execute from top-level kernel tree\n"
