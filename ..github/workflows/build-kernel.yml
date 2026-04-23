@@ -1,0 +1,78 @@
+name: Build ReGinkgo Kernel (Script Based)
+
+on:
+  workflow_dispatch: # Memungkinkan trigger manual dari tab Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Ambil Source Code Kernel (Repo ReGinkgo ini)
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: kernel_src # Kita taruh di folder 'kernel_src' agar rapi
+
+      # 2. Install Aplikasi Dasar Sistem (Hanya yang penting)
+      # Script Anda nanti akan download toolchain sendiri, jadi kita hanya butuh alat bantu download & compile dasar
+      - name: Install System Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git \
+            curl \
+            wget \
+            python3 \
+            make \
+            gcc \
+            g++ \
+            libncurses5-dev \
+            xz-utils \
+            libssl-dev \
+            bc \
+            flex \
+            libelf-dev \
+            bison \
+            zip \
+            unzip \
+            zlib1g-dev \
+            libfdt-dev \
+            device-tree-compiler \
+            cpio \
+            openssh-client \
+            repo
+
+      # 3. Jalankan Script Build Utama
+      # Script ini diasumsikan sudah berisi perintah download toolchain & AnyKernel3
+      - name: Run Build Script
+        run: |
+          cd kernel_src
+          
+          # Beri izin eksekusi agar script bisa dijalankan
+          chmod +x build_reginkgo.sh
+          
+          # Jalankan scriptnya! 
+          # Semua proses download toolchain, compile, dan packing akan terjadi di sini.
+          ./build_reginkgo.sh
+
+      # 4. Upload Hasil Build
+      # Kita asumsikan script Anda menghasilkan file .zip di dalam folder kerja atau folder AnyKernel3
+      # Jika script Anda menaruh zip di lokasi spesifik, sesuaikan 'path' di bawah ini.
+      # Biasanya script seperti ini menghasilkan zip di root folder atau folder AnyKernel3.
+      - name: Upload Kernel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReGinkgo-Kernel-Result
+          # Coba cari file zip yang dihasilkan. 
+          # Opsi 1: Jika zip ada di root folder kernel_src
+          path: kernel_src/*.zip
+          # Opsi 2: Jika zip ada di folder AnyKernel3 (sesuai script sebelumnya)
+          # path: kernel_src/AnyKernel3/*.zip
+          # Opsi 3: Jika zip ada di $HOME (karena script mungkin pakai $HOME)
+          # path: /home/runner/AnyKernel3/*.zip
+          
+          # CATATAN PENTING: 
+          # Karena saya tidak tahu persis di mana script Anda menyimpan file ZIP akhirnya,
+          # Saya akan menggunakan wildcard '*' untuk mencoba menangkap file zip di mana saja dalam folder kerja.
+          # Jika gagal, cek log untuk melihat di mana zip disimpan, lalu ubah 'path' di atas.
