@@ -54,7 +54,7 @@ jobs:
           
           # Jalankan scriptnya! 
           # Semua proses download toolchain, compile, dan packing akan terjadi di sini.
-          ./build_reginkgo.sh
+          ./build_reginkgo.sh ginkgo k
 
       # 4. Upload Hasil Build
       # Kita asumsikan script Anda menghasilkan file .zip di dalam folder kerja atau folder AnyKernel3
